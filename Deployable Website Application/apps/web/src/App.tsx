@@ -36,7 +36,7 @@ function ScamHisnShell() {
   const showWatch = route.startsWith('#/watch');
   const [url, setUrl] = useState('');
 
-  // A "Check it" link on the Watchtower page arrives as #/?check=<address>: put it in the box
+  // A "Check it" link on the Check Everything page arrives as #/?check=<address>: put it in the box
   useEffect(() => {
     const at = route.indexOf('?check=');
     if (at < 0) return;

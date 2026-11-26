@@ -2,8 +2,9 @@
 > The version that was submitted and judged is at [MohmedQaid/ScamHisn-AI](https://github.com/MohmedQaid/ScamHisn-AI) and runs at [scamhisn-ai-v1.onrender.com](https://scamhisn-ai-v1.onrender.com/). Nothing here changes that submission.
 >
 > **New in version 2**
-> - **Watchtower:** reads the public certificate logs and finds new addresses that imitate UAE brands, before anyone reports them. No AI and no key needed. See [`apps/api/src/watch/`](<./Deployable Website Application/apps/api/src/watch/>).
-> - **Check Everything in the public extension:** when switched on, the first outside links on each page, search results included, are checked and badged.
+> - **Check Everything, on the server:** reads the public certificate logs every 10 minutes and finds new addresses that imitate UAE brands, before anyone reports them. No AI and no key needed. It has its own page on the site. See [`apps/api/src/watch/`](<./Deployable Website Application/apps/api/src/watch/>).
+> - **Check Everything, in the browser:** the extension feature is now in the public build. When switched on, the first outside links on each page, search results included, are checked and badged.
+> - **Claude as backup:** when every Gemini key and model fails, Claude researches the page or reads the screenshot, so the Job, Map and Screenshot checks keep working.
 
 <div align="center">
 

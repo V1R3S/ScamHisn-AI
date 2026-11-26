@@ -202,7 +202,7 @@ export function createV1Router(): Router {
     }
   });
 
-  // Watchtower: look-alikes of protected brands found in newly issued certificates
+  // Check Everything (server side): look-alikes of protected brands found in newly issued certificates
   router.get('/watch', (_req, res) => {
     res.json({ status: getWatchStatus(), findings: listFindings().slice(0, 200) });
   });

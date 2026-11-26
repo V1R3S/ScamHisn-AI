@@ -11,7 +11,7 @@ import { fetchEntries, fetchLogList, fetchTreeSize, type CtLog } from './ctLogs.
 import { SEED_FINDINGS, SEED_TOTALS } from './seedFindings.js';
 
 /**
- * The watchtower: looks for look-alikes of protected UAE brands among host names that received
+ * Check Everything, server side: looks for look-alikes of protected UAE brands among host names that received
  * an HTTPS certificate in the last minutes, before anyone has reported them.
  *
  * It needs no AI and no API key. Each new host name goes through the same brand catalogue and

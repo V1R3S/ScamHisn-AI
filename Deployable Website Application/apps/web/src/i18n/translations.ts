@@ -326,7 +326,7 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     },
     nav: {
       check: 'Check',
-      watch: 'Watchtower',
+      watch: 'Check Everything',
       impact: 'Impact',
       pitch: 'Watch the pitch',
       back: 'Back to the inspector',
@@ -592,7 +592,7 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     },
     nav: {
       check: 'الفحص',
-      watch: 'المراقبة',
+      watch: 'افحص كل شيء',
       impact: 'الأثر',
       pitch: 'شاهد العرض',
       back: 'رجوع إلى الفاحص',

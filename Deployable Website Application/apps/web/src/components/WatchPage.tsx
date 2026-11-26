@@ -37,8 +37,8 @@ const API_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.repl
 
 const TEXT = {
   en: {
-    title: 'Watchtower',
-    lead: 'Every HTTPS site gets a certificate, and every certificate is written to a public log, usually minutes before the site goes live. The watchtower reads those logs and looks for new addresses that imitate UAE brands, before anyone has reported them.',
+    title: 'Check Everything',
+    lead: 'Every HTTPS site gets a certificate, and every certificate is written to a public log, usually minutes before the site goes live. Check Everything reads those logs and looks for new addresses that imitate UAE brands, before anyone has reported them.',
     certs: 'certificates read',
     names: 'addresses checked',
     found: 'look-alikes found',
@@ -66,11 +66,11 @@ const TEXT = {
     ],
     ago: (m: number) => (m < 1 ? 'just now' : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`),
     days: (d: number) => (d === 0 ? 'today' : d === 1 ? 'yesterday' : `${d} days ago`),
-    failed: 'The watchtower could not be reached.',
+    failed: 'Check Everything could not be reached.',
   },
   ar: {
-    title: 'برج المراقبة',
-    lead: 'كل موقع آمن يحصل على شهادة، وكل شهادة تُسجَّل في سجل عام، غالباً قبل تشغيل الموقع بدقائق. برج المراقبة يقرأ هذه السجلات ويبحث عن عناوين جديدة تنتحل جهات إماراتية، قبل أن يبلّغ عنها أحد.',
+    title: 'افحص كل شيء',
+    lead: 'كل موقع آمن يحصل على شهادة، وكل شهادة تُسجَّل في سجل عام، غالباً قبل تشغيل الموقع بدقائق. خاصية «افحص كل شيء» تقرأ هذه السجلات ويبحث عن عناوين جديدة تنتحل جهات إماراتية، قبل أن يبلّغ عنها أحد.',
     certs: 'شهادة تمت قراءتها',
     names: 'عنوان تم فحصه',
     found: 'عنوان منتحِل',
@@ -98,7 +98,7 @@ const TEXT = {
     ],
     ago: (m: number) => (m < 1 ? 'الآن' : m < 60 ? `قبل ${m} د` : m < 1440 ? `قبل ${Math.round(m / 60)} س` : `قبل ${Math.round(m / 1440)} يوم`),
     days: (d: number) => (d === 0 ? 'اليوم' : d === 1 ? 'أمس' : `قبل ${d} يوماً`),
-    failed: 'تعذّر الوصول إلى برج المراقبة.',
+    failed: 'تعذّر الوصول إلى خدمة «افحص كل شيء».',
   },
 } as const;
 
@@ -163,7 +163,7 @@ export function WatchPage() {
     const blob = new Blob([`﻿${toCsv(findings)}`], { type: 'text/csv;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `scamhisn-watchtower-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.download = `scamhisn-check-everything-${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
   };
