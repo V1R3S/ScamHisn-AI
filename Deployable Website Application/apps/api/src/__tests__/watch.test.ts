@@ -104,3 +104,25 @@ test('a look-alike gets the same score a pasted link with that address gets', as
   assert.equal(finding.certLoggedAt, '2026-11-26T02:35:00.000Z');
   assert.equal(finding.resolves, false);
 });
+
+test('with Claude as backup, job, map and image checks stay on while every Gemini key cools down', async () => {
+  const { computeCapabilities } = await import('../ai/availability.js');
+  const base = {
+    geminiProviderIds: ['gemini:key1:m'],
+    coolingUntil: () => Date.now() + 60_000,
+    localModel: null,
+    pipeline: 'gemini_first' as const,
+    now: Date.now(),
+  };
+  const without = computeCapabilities(base);
+  assert.equal(without.features.image.available, false);
+  assert.equal(without.features.job.reason, 'gemini_cooling_down');
+  const withClaude = computeCapabilities({ ...base, claudeConfigured: true });
+  assert.equal(withClaude.features.image.available, true);
+  assert.equal(withClaude.features.job.available, true);
+  assert.equal(withClaude.features.map.available, true);
+  assert.equal(withClaude.geminiAvailable, false, 'Gemini itself is still reported as cooling down');
+  // No Gemini key at all, only Claude
+  const onlyClaude = computeCapabilities({ ...base, geminiProviderIds: [], claudeConfigured: true });
+  assert.equal(onlyClaude.features.image.available, true);
+});

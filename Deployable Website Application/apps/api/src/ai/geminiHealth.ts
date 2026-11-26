@@ -68,6 +68,7 @@ export function getAiCapabilities(): AiCapabilities {
     geminiProviderIds: allGeminiProviderIds(),
     coolingUntil: unavailableUntil,
     localModel: config.localLlm?.model ?? null,
+    claudeConfigured: Boolean(config.anthropicApiKey),
     pipeline: config.aiPipeline === 'hybrid' && config.localLlm ? 'hybrid' : 'gemini_first',
     now: Date.now(),
   });

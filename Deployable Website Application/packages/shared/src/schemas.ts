@@ -295,7 +295,7 @@ export type CoverageLevel = z.infer<typeof CoverageLevelSchema>;
  * - local:  the self-hosted model answered alone (no live lookups)
  * - hybrid: Gemini gathered the live evidence and the self-hosted model made the judgment
  */
-export const AiProviderKindSchema = z.enum(['gemini', 'gemini_backup', 'local', 'hybrid', 'none']);
+export const AiProviderKindSchema = z.enum(['gemini', 'gemini_backup', 'claude', 'local', 'hybrid', 'none']);
 export type AiProviderKind = z.infer<typeof AiProviderKindSchema>;
 
 export const AnalysisCoverageSchema = z.object({

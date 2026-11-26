@@ -201,7 +201,10 @@ export async function runUrlScan(request: ScanRequest): Promise<ScanResponse> {
     // Gemini ran out during this very scan: the keys are now cooling down, so report the
     // Job / Map check as paused rather than answer without live lookups.
     const geminiAnswered =
-      aiResult.provider === 'gemini' || aiResult.provider === 'gemini_backup' || aiResult.provider === 'hybrid';
+      aiResult.provider === 'gemini' ||
+      aiResult.provider === 'gemini_backup' ||
+      aiResult.provider === 'claude' ||
+      aiResult.provider === 'hybrid';
     if ((request.mode === 'job' || request.mode === 'map') && !geminiAnswered) {
       assertFeatureAvailable(request.mode);
     }

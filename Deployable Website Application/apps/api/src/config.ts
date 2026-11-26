@@ -61,6 +61,10 @@ export const config = {
   port: parsePositiveInt(process.env.PORT, 3001),
   geminiApiKey: geminiApiKeys[0] ?? null,
   geminiApiKeys,
+  // Claude answers when every Gemini key and model has failed (see ai/claudeBackup.ts)
+  anthropicApiKey: process.env.ANTHROPIC_API_KEY?.trim() || null,
+  claudeModel: process.env.CLAUDE_MODEL?.trim() || 'claude-opus-5-5',
+  claudeTimeoutMs: parsePositiveInt(process.env.CLAUDE_TIMEOUT_MS, 40_000),
   geminiModel: process.env.GEMINI_MODEL?.trim() || DEFAULT_GEMINI_MODEL,
   /** Second Gemini model tried when the primary is overloaded or rate limited (limits are per model). */
   geminiFallbackModel: process.env.GEMINI_FALLBACK_MODEL?.split(',')[0]?.trim() || null,

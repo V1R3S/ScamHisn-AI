@@ -13,6 +13,7 @@ import {
 import { createLocalLlmProvider } from './localLlmProvider.js';
 import { RefusalMemo } from './refusalMemo.js';
 import { runHybridAnalysis } from './hybridPipeline.js';
+import { claudeConfigured, createClaudeProvider } from './claudeBackup.js';
 import {
   geminiModels,
   geminiProviderId,
@@ -775,20 +776,40 @@ export function buildGeminiProviders(): AiProvider[] {
 export async function analyzeWithAi(input: AiAnalysisInput): Promise<AiChainResult> {
   const geminiProviders = buildGeminiProviders();
   const local = config.localLlm ? createLocalLlmProvider(config.localLlm) : null;
-  const geminiOptions = { perProviderTimeoutMs: config.aiRequestTimeoutMs + 2_000 };
+  // Claude is the last hosted option: it is tried only after every Gemini key and model failed
+  const claude = claudeConfigured()
+    ? createClaudeProvider({
+        buildPrompt: buildAnalysisPrompt,
+        toAnalysis: (rawJson, claudeInput, model) =>
+          toAiForensicAnalysis(parseGeminiJsonResponse(rawJson, claudeInput.browser.coordinates), {
+            mode: claudeInput.mode,
+            status: 'degraded',
+            error: 'Gemini was unavailable, so Claude researched this check. Live Google Search / Maps sources were not checked.',
+            model,
+            groundingUsed: [],
+            groundingSources: [],
+            coordinates: claudeInput.browser.coordinates,
+          }),
+      })
+    : null;
+  const hosted = claude ? [...geminiProviders, claude] : geminiProviders;
+  const geminiOptions = {
+    perProviderTimeoutMs: Math.max(config.aiRequestTimeoutMs, claude ? config.claudeTimeoutMs : 0) + 2_000,
+  };
 
   if (local && config.aiPipeline === 'hybrid') {
     return runHybridAnalysis(
       {
-        research: (researchInput) => runAiChain(geminiProviders, researchInput, geminiOptions),
+        research: (researchInput) => runAiChain(hosted, researchInput, geminiOptions),
         judge: local,
       },
       input,
     );
   }
 
-  return runAiChain(local ? [...geminiProviders, local] : geminiProviders, input, {
+  return runAiChain(local ? [...hosted, local] : hosted, input, {
     // Local models are slower than hosted ones, so the ceiling follows the slowest provider.
-    perProviderTimeoutMs: Math.max(config.aiRequestTimeoutMs, config.localLlm?.timeoutMs ?? 0) + 2_000,
+    perProviderTimeoutMs:
+      Math.max(config.aiRequestTimeoutMs, config.localLlm?.timeoutMs ?? 0, claude ? config.claudeTimeoutMs : 0) + 2_000,
   });
 }

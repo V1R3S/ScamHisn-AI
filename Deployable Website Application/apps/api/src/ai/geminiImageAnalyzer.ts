@@ -5,6 +5,7 @@ import { config } from '../config.js';
 import { scoreToVerdict } from '../scoring/scoringEngine.js';
 import { isPermanentAiError, isTransientAiError } from './aiChain.js';
 import { combineImageScores, judgeImageExtraction } from './imageJudge.js';
+import { claudeConfigured, claudeModel, readImageWithClaude } from './claudeBackup.js';
 import {
   assertFeatureAvailable,
   geminiModels,
@@ -172,7 +173,7 @@ export async function inspectUploadedImage(req: ImageScanRequest): Promise<Image
     };
   }
 
-  if (config.geminiApiKeys.length === 0) {
+  if (config.geminiApiKeys.length === 0 && !claudeConfigured()) {
     throw new Error('AI_NOT_CONFIGURED');
   }
   // Reading an image needs Gemini's vision. If every key is cooling down, the feature is paused.
@@ -255,6 +256,22 @@ export async function inspectUploadedImage(req: ImageScanRequest): Promise<Image
           err instanceof Error ? err.message.slice(0, 200) : String(err)
         }`,
       );
+    }
+  }
+
+  // Every Gemini key and model failed or is cooling down: Claude reads the image instead
+  if (!parsed && claudeConfigured()) {
+    try {
+      parsed = (await readImageWithClaude({
+        systemInstruction: SYSTEM_INSTRUCTION,
+        shape: IMAGE_RESPONSE_SCHEMA,
+        mimeType: req.mimeType,
+        base64Data,
+      })) as RawImageAiJson;
+      usedModel = claudeModel();
+    } catch (err) {
+      lastError = err;
+      console.warn(`[ScamHisn AI chain] image scan on Claude failed: ${err instanceof Error ? err.message.slice(0, 200) : String(err)}`);
     }
   }
 

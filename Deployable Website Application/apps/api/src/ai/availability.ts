@@ -18,6 +18,8 @@ export interface CapabilityInput {
   coolingUntil: (providerId: string) => number | null;
   /** Name of the self-hosted model, or null when none is configured. */
   localModel: string | null;
+  /** True when Claude is configured as the backup researcher and image reader. */
+  claudeConfigured?: boolean;
   pipeline: AiCapabilities['pipeline'];
   now: number;
 }
@@ -35,7 +37,8 @@ export function computeCapabilities(input: CapabilityInput): AiCapabilities {
       : null;
 
   const always: FeatureAvailability = { available: true, reason: 'ok', retryAt: null };
-  const needsGemini: FeatureAvailability = geminiAvailable
+  // With Claude as backup these features keep working while Gemini cools down
+  const needsGemini: FeatureAvailability = geminiAvailable || input.claudeConfigured
     ? always
     : geminiConfigured
       ? { available: false, reason: 'gemini_cooling_down', retryAt: geminiRetryAt }

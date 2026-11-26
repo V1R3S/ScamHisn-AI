@@ -11,6 +11,7 @@
     "watch:seed": "tsx src/watch/seedCli.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.14.0",
     "@google/genai": "^1.0.0",
     "@scamhisn/shared": "*",
     "cors": "^2.8.5",
