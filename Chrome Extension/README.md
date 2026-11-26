@@ -6,11 +6,11 @@ Works in Chrome, Edge, Brave, Arc and Opera (any Chromium browser, Manifest V3).
 
 ## Install it in two minutes
 
-1. [Download the extension (.zip)](https://scamhisn-ai-v2.onrender.com/scamhisn-extension.zip) and unzip it. If you cloned this repository, you can use the `deployable/` folder instead.
+1. [Download the extension (.zip)](https://scamhisn-ai-o2k9.onrender.com/scamhisn-extension.zip) and unzip it. If you cloned this repository, you can use the `deployable/` folder instead.
 2. Open `chrome://extensions`, switch on **Developer mode**, click **Load unpacked** and choose the folder.
 3. Click the ScamHisn AI icon in the toolbar, or right-click any link and choose **Inspect link with ScamHisn AI**.
 
-The ⚙ button in the popup sets which server the extension talks to. It starts on `https://scamhisn-ai-v2.onrender.com`; use `http://localhost:3001` when you run the app yourself.
+The ⚙ button in the popup sets which server the extension talks to. It starts on `https://scamhisn-ai-o2k9.onrender.com`; use `http://localhost:3001` when you run the app yourself.
 
 ## Two ways to use it
 

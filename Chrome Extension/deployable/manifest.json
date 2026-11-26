@@ -35,7 +35,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://scamhisn-ai-v2.onrender.com/*"
+        "https://scamhisn-ai-o2k9.onrender.com/*"
       ],
       "js": [
         "src/bridge.js"

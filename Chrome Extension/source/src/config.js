@@ -4,6 +4,6 @@
 export const EXTENSION_CONFIG = {
   DEV_MODE: true,
   PRIVATE_BUILD: false,
-  DEFAULT_API_BASE: 'https://scamhisn-ai-v2.onrender.com',
+  DEFAULT_API_BASE: 'https://scamhisn-ai-o2k9.onrender.com',
   MAX_AUTO_LINKS_PER_PAGE: 6,
 };
