@@ -28,9 +28,13 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
   }
 });
 
+// An address that was never live (the first version 2 build used it). A saved copy is ignored.
+const DEAD_API_BASES = ['https://scamhisn-ai-v2.onrender.com'];
+
 async function getApiBase() {
   const stored = await chrome.storage.sync.get(['apiBaseUrl']);
-  const raw = (stored.apiBaseUrl || EXTENSION_CONFIG.DEFAULT_API_BASE || '').trim();
+  let raw = (stored.apiBaseUrl || '').trim().replace(/\/$/, '');
+  if (!raw || DEAD_API_BASES.includes(raw)) raw = (EXTENSION_CONFIG.DEFAULT_API_BASE || '').trim();
   return raw.replace(/\/$/, '');
 }
 

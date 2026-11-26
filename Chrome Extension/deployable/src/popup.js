@@ -473,8 +473,12 @@ async function init() {
 
   if (syncData.locale === 'ar' || syncData.locale === 'en') state.locale = syncData.locale;
   if (syncData.theme === 'light' || syncData.theme === 'dark') state.theme = syncData.theme;
-  if (typeof syncData.apiBaseUrl === 'string' && syncData.apiBaseUrl.trim()) {
-    state.apiBaseUrl = syncData.apiBaseUrl.trim().replace(/\/$/, '');
+  // An address that was never live (the first version 2 build used it) is dropped for the default
+  const savedBase = typeof syncData.apiBaseUrl === 'string' ? syncData.apiBaseUrl.trim().replace(/\/$/, '') : '';
+  if (savedBase === 'https://scamhisn-ai-v2.onrender.com') {
+    await storageSet('sync', { apiBaseUrl: state.apiBaseUrl });
+  } else if (savedBase) {
+    state.apiBaseUrl = savedBase;
   }
   state.devAutoMonitorEnabled = Boolean(localData.devAutoMonitorEnabled);
 
