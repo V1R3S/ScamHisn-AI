@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ImpactPage } from './components/ImpactPage';
+import { WatchPage } from './components/WatchPage';
 import { Download } from 'lucide-react';
 import type { AiCapabilities, ImageScanResponse, ScanMode, ScanResponse } from '@scamhisn/shared';
 import { LocaleProvider, useLocale } from './i18n/LocaleContext';
@@ -30,8 +31,21 @@ function useHashRoute(): string {
 
 function ScamHisnShell() {
   const { locale, t } = useLocale();
-  const showImpact = useHashRoute().startsWith('#/impact');
+  const route = useHashRoute();
+  const showImpact = route.startsWith('#/impact');
+  const showWatch = route.startsWith('#/watch');
   const [url, setUrl] = useState('');
+
+  // A "Check it" link on the Watchtower page arrives as #/?check=<address>: put it in the box
+  useEffect(() => {
+    const at = route.indexOf('?check=');
+    if (at < 0) return;
+    try {
+      setUrl(decodeURIComponent(route.slice(at + 7)));
+    } catch {
+      // a malformed address is simply ignored
+    }
+  }, [route]);
   const [mode, setMode] = useState<InspectorTab>('general');
   const [selectedImage, setSelectedImage] = useState<CompressedImagePayload | null>(null);
   const [isScanning, setIsScanning] = useState(false);
@@ -148,7 +162,13 @@ function ScamHisnShell() {
         </main>
       )}
 
-      <main hidden={showImpact} className="mx-auto w-full max-w-[1104px] flex-1 px-4 pb-20 sm:px-8 sm:pb-24">
+      {showWatch && (
+        <main className="flex-1">
+          <WatchPage />
+        </main>
+      )}
+
+      <main hidden={showImpact || showWatch} className="mx-auto w-full max-w-[1104px] flex-1 px-4 pb-20 sm:px-8 sm:pb-24">
         <Hero compact={compactHero} />
 
         {/* Inspection Form */}

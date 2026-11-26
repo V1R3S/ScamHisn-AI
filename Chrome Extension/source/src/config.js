@@ -1,8 +1,9 @@
 // Build-time configuration (automatically set by scripts/build.mjs)
-// Production (deployable/) sets DEV_MODE = false so "Check Everything" is strictly locked.
-// Private dev build (dev/) sets DEV_MODE = true for developer testing only.
+// Since version 2, DEV_MODE is true in both builds: it unlocks "Check Everything".
+// PRIVATE_BUILD is true only in dev/, which talks to a local server.
 export const EXTENSION_CONFIG = {
-  DEV_MODE: false,
-  DEFAULT_API_BASE: 'https://scamhisn-ai-v1.onrender.com',
+  DEV_MODE: true,
+  PRIVATE_BUILD: false,
+  DEFAULT_API_BASE: 'https://scamhisn-ai-v2.onrender.com',
   MAX_AUTO_LINKS_PER_PAGE: 6,
 };

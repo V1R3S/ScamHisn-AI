@@ -1,3 +1,10 @@
+> **This is version 2 of ScamHisn AI, built after the hackathon submission deadline (8:00 AM, 25 November 2026).**
+> The version that was submitted and judged is at [MohmedQaid/ScamHisn-AI](https://github.com/MohmedQaid/ScamHisn-AI) and runs at [scamhisn-ai-v1.onrender.com](https://scamhisn-ai-v1.onrender.com/). Nothing here changes that submission.
+>
+> **New in version 2**
+> - **Watchtower:** reads the public certificate logs and finds new addresses that imitate UAE brands, before anyone reports them. No AI and no key needed. See [`apps/api/src/watch/`](<./Deployable Website Application/apps/api/src/watch/>).
+> - **Check Everything in the public extension:** when switched on, the first outside links on each page, search results included, are checked and badged.
+
 <div align="center">
 
 <sub><strong>42 ABU DHABI × ABU DHABI POLICE — SCAMSHIELD AI HACKATHON</strong></sub>

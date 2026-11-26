@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { getWatchStatus, listFindings, runWatchCycle } from '../watch/watchService.js';
 import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
 import {
@@ -199,6 +200,18 @@ export function createV1Router(): Router {
         },
       });
     }
+  });
+
+  // Watchtower: look-alikes of protected brands found in newly issued certificates
+  router.get('/watch', (_req, res) => {
+    res.json({ status: getWatchStatus(), findings: listFindings().slice(0, 200) });
+  });
+
+  // Starts one pass now. A pass already under way is not started twice.
+  router.post('/watch/run', scanLimiter, (_req, res) => {
+    const status = getWatchStatus();
+    if (!status.running) void runWatchCycle();
+    res.status(202).json({ status: { ...status, running: true } });
   });
 
   router.post('/report/pdf', scanLimiter, async (req, res) => {

@@ -174,7 +174,7 @@ function applyModeTab() {
     el('auto-locked-view').classList.add('hidden');
     el('auto-dev-view').classList.remove('hidden');
     el('tab-auto-lock').classList.add('hidden');
-    el('dev-pill').classList.remove('hidden');
+    el('dev-pill').classList.toggle('hidden', !EXTENSION_CONFIG.PRIVATE_BUILD);
   } else {
     el('auto-locked-view').classList.remove('hidden');
     el('auto-dev-view').classList.add('hidden');

@@ -1,5 +1,5 @@
-// Private Developer Build Only — injected ONLY in dev/ manifest when Check Everything is ON.
-// Never included in production deployable/ manifest.
+// Check Everything: when the user switches it on in the popup, the first few outside links on
+// each page (search results included) are checked and get a small score badge beside them.
 (() => {
   const MAX_LINKS_PER_PAGE = 6;
   const BADGE_ATTR = 'data-scamhisn-checked';
