@@ -64,7 +64,7 @@ This rewrites `deployable/`, creates `dev/`, and updates the download the websit
 
 ## Tested
 
-On 26 November 2026, in Microsoft Edge with a fresh profile and the developer build against a local server:
+On 26 November 2026, in Microsoft Edge with a fresh profile. Every case was run twice: with the developer build against a local server, and with the public build against the live site.
 
 | Case | Result |
 |---|---|
