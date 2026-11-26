@@ -784,7 +784,10 @@ export async function analyzeWithAi(input: AiAnalysisInput): Promise<AiChainResu
           toAiForensicAnalysis(parseGeminiJsonResponse(rawJson, claudeInput.browser.coordinates), {
             mode: claudeInput.mode,
             status: 'degraded',
-            error: 'Gemini was unavailable, so Claude researched this check. Live Google Search / Maps sources were not checked.',
+            error:
+              claudeInput.engine === 'claude'
+                ? 'Check Everything: Claude researched this site and the self-hosted model judged it. Live Google Search / Maps sources were not checked.'
+                : 'Gemini was unavailable, so Claude researched this check. Live Google Search / Maps sources were not checked.',
             model,
             groundingUsed: [],
             groundingSources: [],
