@@ -12,11 +12,17 @@ ScamHisn has two AI roles, and neither is a single point of failure.
 |---|---|---|
 | Gemini and the local model both up | Gemini researches, local model judges | Gemini researches, local model judges (images: Gemini only) |
 | Local model down | Gemini judges alone | Gemini judges alone |
-| Gemini down on every key | Local model judges alone, marked "live sources not checked" | **Paused** for a cool-down, then switched back on automatically |
-| Both down | Rules only, shown as "Incomplete check", never "safe" | Paused |
+| Gemini down on every key, Claude configured | Claude researches, local model judges | Claude researches or reads the image, local model judges |
+| Gemini down on every key, no Claude | Local model judges alone, marked "live sources not checked" | **Paused** for a cool-down, then switched back on automatically |
+| All down | Rules only, shown as "Incomplete check", never "safe" | Paused |
 
-Job, Map and Image checks are paused rather than degraded because they depend on things only
-Gemini can do: live lookups and reading images.
+Without Claude, Job, Map and Image checks are paused rather than degraded because they depend on
+things the local model cannot do: research and reading images. Claude does both, so with
+`ANTHROPIC_API_KEY` set they keep working; Claude is asked without live Google lookups, and the
+result says so.
+
+**Check Everything** (the extension toggle) runs on every site the user opens, so it asks Claude
+first, then Gemini, with the local model judging. Manual checks keep Gemini first.
 
 ## Settings
 
@@ -140,7 +146,7 @@ Tested on 24 Nov 2026 with Falcon-H1 7B (Q4_K_M) on an RTX 3080 through llama.cp
   under 2 seconds each.
 - End to end with Gemini failing for real (an invalid key): the local model judged a real page
   alone, Job, Map and Image paused with a countdown, and they came back after the cool-down.
-- 144 unit tests cover the chain, the hybrid merge rules, the cool-down and the availability logic.
+- 149 unit tests cover the chain, the hybrid merge rules, the cool-down, the availability logic, the Claude engine choice and the instant address check.
 
 Tested late on 24 Nov 2026 with two real free-tier Gemini keys, a list of backup models and
 Falcon-H1 as judge (a local production build):

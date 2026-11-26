@@ -10,7 +10,7 @@ One Node.js process serves both. In production it runs in a single Docker contai
 |---|---|
 | `apps/web/` | The website: React 19, Vite, Tailwind CSS. Arabic (right to left) and English. |
 | `apps/api/` | The API: Express and TypeScript. Opens pages in a throwaway Chromium (Playwright), runs the technical checks, asks the AI models, and scores the result. |
-| `apps/api/src/__tests__/` | 144 automated tests. |
+| `apps/api/src/__tests__/` | 149 automated tests. |
 | `apps/api/eval/` | The scripts that produced the measured accuracy in [`docs/eval/`](../docs/eval/address-layer.md). |
 | `packages/shared/` | The data shapes the website, the API and the extension all agree on. |
 | `scripts/start-falcon-live.ps1` | Starts the self-hosted judge model and a tunnel so a deployed site can reach it. |
@@ -27,10 +27,10 @@ cp .env.example .env         # then put your key in GEMINI_API_KEY
 npm run dev                  # website on http://localhost:5173, API on http://localhost:3001
 ```
 
-Without a key the app still runs: link checks use the rule engine alone and say so, and the Job, Map and Screenshot checks show as paused.
+Without any AI key the app still runs: link checks use the rule engine alone and say so, and the Job, Map and Screenshot checks show as paused. With `ANTHROPIC_API_KEY` set, Claude takes over whenever Gemini is missing or busy, and Check Everything in the extension uses Claude first.
 
 ```bash
-npm test                     # the 144 tests
+npm test                     # the 149 tests
 npm run typecheck
 npm run build && npm start   # production build, served on port 3001
 ```

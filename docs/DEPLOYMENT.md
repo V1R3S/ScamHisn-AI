@@ -44,7 +44,7 @@ Merging to `main` only redeploys if the Render service is connected to this repo
 
 The site can always load its own pages whatever `CORS_ALLOWED_ORIGINS` says; that setting only governs other websites.
 
-Without any Gemini key the app still runs: link checks use the rule engine alone and say so, and the Job, Map and Screenshot checks show as paused.
+Without any AI key the app still runs: link checks use the rule engine alone and say so, and the Job, Map and Screenshot checks show as paused. Add `ANTHROPIC_API_KEY` so Claude takes over when Gemini is missing or busy; Check Everything in the extension uses Claude first.
 
 ### The self-hosted judge (Falcon-H1)
 
@@ -66,6 +66,7 @@ On the free plan the service sleeps when idle; the first request after a pause t
 
 ## What was and was not tested
 
-- **Tested on 25 November 2026:** Render built the image from the root `Dockerfile` in 1 minute 19 seconds, and the app has run at `https://scamhisn-ai-v1.onrender.com` since. On the live service the page loads, all four kinds of check are switched on, a fake fine link scores 84%, and the real Abu Dhabi Police site scores 0% with the self-hosted model judging through a tunnel.
-- **Not tested:** Job, Map and Screenshot checks with real scans on the live service, and other hosts than Render.
-- A service created from a public repository address does not redeploy by itself. After a change, press **Manual Deploy**.
+- **Tested on 26 November 2026:** version 2 runs at `https://scamhisn-ai-o2k9.onrender.com`, built from the root `Dockerfile`. On the live service all four kinds of check are switched on, the Claude engine researches with the self-hosted Falcon-H1 judging through a tunnel, and Check Everything in the extension replaced a fake police address with the report.
+- **Not tested:** other hosts than Render.
+- A service connected to your own GitHub account redeploys by itself after every push. One created from a public repository address does not: press **Manual Deploy** after a change.
+- The address Render gives a service is fixed when it is created. If yours differs from `scamhisn-ai-o2k9.onrender.com`, change `DEFAULT_API_BASE` in `Chrome Extension/scripts/build.mjs` and run it, so the extension talks to your copy.
