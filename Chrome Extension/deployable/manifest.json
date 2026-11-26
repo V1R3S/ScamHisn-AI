@@ -3,7 +3,7 @@
   "name": "ScamHisn AI — Link & Fraud Inspector",
   "short_name": "ScamHisn AI",
   "version": "2.0.0",
-  "description": "Inspect suspicious URLs, job posts, and map links before you click using ScamHisn AI.",
+  "description": "Check links, job posts, map links and screenshots with ScamHisn AI, or switch on Check Everything to have every site checked before you use it.",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
@@ -26,7 +26,8 @@
   "permissions": [
     "activeTab",
     "storage",
-    "contextMenus"
+    "contextMenus",
+    "webNavigation"
   ],
   "host_permissions": [
     "https://*.onrender.com/*"
@@ -34,13 +35,12 @@
   "content_scripts": [
     {
       "matches": [
-        "http://*/*",
-        "https://*/*"
+        "https://scamhisn-ai-v2.onrender.com/*"
       ],
       "js": [
-        "src/content.js"
+        "src/bridge.js"
       ],
-      "run_at": "document_idle"
+      "run_at": "document_start"
     }
   ]
 }

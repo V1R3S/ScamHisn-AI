@@ -7,12 +7,12 @@ export const TRANSLATIONS = {
     lockedTitle: 'Developers Only',
     lockedBody:
       'Automatic page-wide link monitoring is locked in production and reserved for private developer testing. Use "Check Manually" to inspect any link.',
-    devMonitorTitle: 'Private Developer Monitor',
+    devMonitorTitle: 'Check Everything',
     devMonitorDesc:
-      'Automatically scans visible external links on open pages (e.g. WhatsApp Web, Gmail, LinkedIn) and shows inline risk badges.',
-    devMonitorToggle: 'Auto-Monitor Pages',
-    devActiveStatus: 'Monitoring active pages (dev build)',
-    devInactiveStatus: 'Monitoring paused',
+      'Every site you open, and every site a page redirects you to, goes through the ScamHisn AI engine. If it is not legitimate, the report opens instead of the site.',
+    devMonitorToggle: 'Check every site I open',
+    devActiveStatus: 'On: sites are checked as they open',
+    devInactiveStatus: 'Off: nothing is checked automatically',
     categories: {
       general: 'Link',
       job: 'Job post',
@@ -85,17 +85,17 @@ export const TRANSLATIONS = {
   ar: {
     brand: 'حصن الاحتيال',
     tabManual: 'فحص يدوي',
-    tabAuto: 'فحص شامل',
+    tabAuto: 'افحص كل شيء',
     devOnlyBadge: 'للمطورين فقط',
     lockedTitle: 'للمطورين فقط',
     lockedBody:
       'وضع الفحص التلقائي الشامل مقفول في النسخة الرسمية ومخصص فقط لتجارب المطورين. استخدم "فحص يدوي" لفحص أي رابط.',
-    devMonitorTitle: 'المراقبة التلقائية (نسخة المطور)',
+    devMonitorTitle: 'افحص كل شيء',
     devMonitorDesc:
-      'يفحص الروابط الخارجية الظاهرة في الصفحات المفتوحة تلقائياً (مثل واتساب ويب أو الإيميل) ويعرض نسبة الخطر بجانب كل رابط.',
-    devMonitorToggle: 'تفعيل الفحص التلقائي',
-    devActiveStatus: 'المراقبة مفعّلة (نسخة المطور)',
-    devInactiveStatus: 'المراقبة متوقفة',
+      'كل موقع تفتحه، وكل موقع تُحوَّل إليه، يمر على محرك حصن الاحتيال. إذا لم يكن الموقع سليماً يُفتح التقرير بدلاً منه.',
+    devMonitorToggle: 'افحص كل موقع أفتحه',
+    devActiveStatus: 'مفعّل: تُفحص المواقع عند فتحها',
+    devInactiveStatus: 'متوقف: لا يُفحص شيء تلقائياً',
     categories: {
       general: 'رابط',
       job: 'إعلان وظيفة',

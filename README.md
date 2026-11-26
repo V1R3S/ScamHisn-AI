@@ -2,9 +2,9 @@
 > The version that was submitted and judged is at [MohmedQaid/ScamHisn-AI](https://github.com/MohmedQaid/ScamHisn-AI) and runs at [scamhisn-ai-v1.onrender.com](https://scamhisn-ai-v1.onrender.com/). Nothing here changes that submission.
 >
 > **New in version 2**
-> - **Check Everything, on the server:** reads the public certificate logs every 10 minutes and finds new addresses that imitate UAE brands, before anyone reports them. No AI and no key needed. It has its own page on the site. See [`apps/api/src/watch/`](<./Deployable Website Application/apps/api/src/watch/>).
-> - **Check Everything, in the browser:** the extension feature is now in the public build. When switched on, the first outside links on each page, search results included, are checked and badged.
-> - **Claude as backup:** when every Gemini key and model fails, Claude researches the page or reads the screenshot, so the Job, Map and Screenshot checks keep working.
+> - **Check Everything.** A toggle in the browser extension. While it is on, every site you open goes through the ScamHisn AI engine first, and so does every site a page redirects you to. If a site is not legitimate, the report opens instead of the site, with the usual **Download evidence report** and **Report to Abu Dhabi Police** buttons. See [`Chrome Extension/README.md`](<./Chrome Extension/README.md>).
+> - **A Claude and Falcon engine for it.** Check Everything asks Claude to research and the self-hosted Falcon-H1 to judge, so it does not pause when Google's free Gemini service is busy. Manual checks keep Gemini first.
+> - **Claude as backup everywhere.** When every Gemini key and model fails, Claude researches the page or reads the screenshot, so the Job, Map and Screenshot checks keep working.
 
 <div align="center">
 

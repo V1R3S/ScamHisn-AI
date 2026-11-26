@@ -5,26 +5,23 @@ import { ThemeToggle } from './ThemeToggle';
 import { HisnLogo } from './HisnLogo';
 
 /** Which page the hash router is showing, so the matching nav link can be underlined. */
-function useRoute(): 'check' | 'watch' | 'impact' {
-  const read = () =>
-    window.location.hash.startsWith('#/impact') ? 'impact' : window.location.hash.startsWith('#/watch') ? 'watch' : 'check';
-  const [route, setRoute] = useState<'check' | 'watch' | 'impact'>(read);
+function useIsImpactRoute(): boolean {
+  const [isImpact, setIsImpact] = useState(() => window.location.hash.startsWith('#/impact'));
   useEffect(() => {
-    const onChange = () => setRoute(read());
+    const onChange = () => setIsImpact(window.location.hash.startsWith('#/impact'));
     window.addEventListener('hashchange', onChange);
     return () => window.removeEventListener('hashchange', onChange);
   }, []);
-  return route;
+  return isImpact;
 }
 
 export function Header() {
   const { locale, t, toggleLocale } = useLocale();
-  const route = useRoute();
+  const isImpact = useIsImpactRoute();
 
   const navItems = [
-    { href: '#/', label: t.nav.check, active: route === 'check' },
-    { href: '#/watch', label: t.nav.watch, active: route === 'watch' },
-    { href: '#/impact', label: t.nav.impact, active: route === 'impact' },
+    { href: '#/', label: t.nav.check, active: !isImpact },
+    { href: '#/impact', label: t.nav.impact, active: isImpact },
   ];
 
   return (

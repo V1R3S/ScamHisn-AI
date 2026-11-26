@@ -32,6 +32,8 @@ export interface ResearchNotes {
 
 /** Everything an AI provider (Gemini or a self-hosted model) receives for one scan. */
 export interface AiAnalysisInput {
+  /** 'claude' puts Claude ahead of Gemini as the researcher (Check Everything). */
+  engine?: 'auto' | 'claude';
   mode: ScanMode;
   inputUrl: string;
   finalUrl: string;

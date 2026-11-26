@@ -792,7 +792,12 @@ export async function analyzeWithAi(input: AiAnalysisInput): Promise<AiChainResu
           }),
       })
     : null;
-  const hosted = claude ? [...geminiProviders, claude] : geminiProviders;
+  // Check Everything asks for Claude first; every other check keeps Gemini first
+  const hosted = !claude
+    ? geminiProviders
+    : input.engine === 'claude'
+      ? [claude, ...geminiProviders]
+      : [...geminiProviders, claude];
   const geminiOptions = {
     perProviderTimeoutMs: Math.max(config.aiRequestTimeoutMs, claude ? config.claudeTimeoutMs : 0) + 2_000,
   };

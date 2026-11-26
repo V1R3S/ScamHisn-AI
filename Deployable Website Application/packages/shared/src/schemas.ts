@@ -26,6 +26,8 @@ export const ScanRequestSchema = z.object({
     .max(2048, 'URL exceeds maximum allowed length (2048 characters)'),
   mode: ScanModeSchema.default('general'),
   locale: LocaleSchema.optional().default('en'),
+  /** 'claude' asks Claude to research first (used by Check Everything); 'auto' is the normal chain. */
+  engine: z.enum(['auto', 'claude']).optional().default('auto'),
 });
 export type ScanRequest = z.infer<typeof ScanRequestSchema>;
 

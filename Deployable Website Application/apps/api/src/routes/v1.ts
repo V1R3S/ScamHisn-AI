@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getWatchStatus, listFindings, runWatchCycle } from '../watch/watchService.js';
+import { quickAddressCheck } from '../services/quickCheck.js';
 import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
 import {
@@ -83,6 +83,22 @@ export function createV1Router(): Router {
     res.json(payload);
   });
 
+  // Check Everything: an instant verdict from the address alone, asked before a page opens
+  const quickLimiter = rateLimit({ windowMs: 60_000, max: 240, standardHeaders: true, legacyHeaders: false });
+  router.post('/scan-quick', quickLimiter, (req, res) => {
+    const result = quickAddressCheck(typeof req.body?.url === 'string' ? req.body.url : '');
+    if (!result) {
+      res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'A http or https address is required.' } });
+      return;
+    }
+    res.json(result);
+  });
+
+  // Check Everything scans a site once and the report page asks for the same site moments later:
+  // keep those answers for ten minutes so the report opens at once instead of scanning twice.
+  const guardCache = new Map<string, { at: number; result: unknown }>();
+  const GUARD_TTL_MS = 10 * 60_000;
+
   router.post('/scan', scanLimiter, async (req, res) => {
     const parsed = ScanRequestSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -97,8 +113,20 @@ export function createV1Router(): Router {
       return;
     }
 
+    const guardKey =
+      parsed.data.engine === 'claude' ? `${parsed.data.mode}|${parsed.data.url.trim().toLowerCase()}` : null;
+    const remembered = guardKey ? guardCache.get(guardKey) : undefined;
+    if (remembered && Date.now() - remembered.at < GUARD_TTL_MS) {
+      res.status(200).json(remembered.result);
+      return;
+    }
+
     try {
       const result = await runUrlScan(parsed.data);
+      if (guardKey) {
+        if (guardCache.size >= 200) guardCache.delete(guardCache.keys().next().value as string);
+        guardCache.set(guardKey, { at: Date.now(), result });
+      }
       res.status(200).json(result);
     } catch (err) {
       if (err instanceof FeatureUnavailableError) {
@@ -200,18 +228,6 @@ export function createV1Router(): Router {
         },
       });
     }
-  });
-
-  // Check Everything (server side): look-alikes of protected brands found in newly issued certificates
-  router.get('/watch', (_req, res) => {
-    res.json({ status: getWatchStatus(), findings: listFindings().slice(0, 200) });
-  });
-
-  // Starts one pass now. A pass already under way is not started twice.
-  router.post('/watch/run', scanLimiter, (_req, res) => {
-    const status = getWatchStatus();
-    if (!status.running) void runWatchCycle();
-    res.status(202).json({ status: { ...status, running: true } });
   });
 
   router.post('/report/pdf', scanLimiter, async (req, res) => {

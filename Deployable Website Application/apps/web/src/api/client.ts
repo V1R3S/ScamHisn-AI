@@ -42,6 +42,8 @@ export async function scanUrl(params: {
   url: string;
   mode: ScanMode;
   locale: Locale;
+  /** 'claude' is used by Check Everything; left out, the server uses its normal chain. */
+  engine?: 'auto' | 'claude';
 }): Promise<ScanResponse> {
   const res = await fetch(`${API_BASE}${API_ENDPOINTS.scan}`, {
     method: 'POST',

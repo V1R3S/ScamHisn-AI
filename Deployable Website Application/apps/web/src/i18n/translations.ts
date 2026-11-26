@@ -90,7 +90,6 @@ export interface Translations {
   };
   nav: {
     check: string;
-    watch: string;
     impact: string;
     pitch: string;
     back: string;
@@ -326,7 +325,6 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     },
     nav: {
       check: 'Check',
-      watch: 'Check Everything',
       impact: 'Impact',
       pitch: 'Watch the pitch',
       back: 'Back to the inspector',
@@ -592,7 +590,6 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     },
     nav: {
       check: 'الفحص',
-      watch: 'افحص كل شيء',
       impact: 'الأثر',
       pitch: 'شاهد العرض',
       back: 'رجوع إلى الفاحص',

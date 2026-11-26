@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ImpactPage } from './components/ImpactPage';
-import { WatchPage } from './components/WatchPage';
 import { Download } from 'lucide-react';
 import type { AiCapabilities, ImageScanResponse, ScanMode, ScanResponse } from '@scamhisn/shared';
 import { LocaleProvider, useLocale } from './i18n/LocaleContext';
@@ -14,6 +13,7 @@ import { ScanForm, type InspectorTab } from './components/ScanForm';
 import { ScanProgress } from './components/ScanProgress';
 import { ResultsDashboard } from './components/ResultsDashboard';
 import { ImageResultsCard } from './components/ImageResultsCard';
+import { GuardBanner } from './components/GuardBanner';
 
 /** Minimal hash routing: "#/impact" shows the Impact page, anything else the inspector. */
 function useHashRoute(): string {
@@ -33,19 +33,17 @@ function ScamHisnShell() {
   const { locale, t } = useLocale();
   const route = useHashRoute();
   const showImpact = route.startsWith('#/impact');
-  const showWatch = route.startsWith('#/watch');
-  const [url, setUrl] = useState('');
-
-  // A "Check it" link on the Check Everything page arrives as #/?check=<address>: put it in the box
-  useEffect(() => {
-    const at = route.indexOf('?check=');
-    if (at < 0) return;
+  // The extension's Check Everything opens "#/guard?url=<address>" instead of a site it stopped
+  const guardUrl = (() => {
+    if (!route.startsWith('#/guard')) return null;
     try {
-      setUrl(decodeURIComponent(route.slice(at + 7)));
+      const value = new URLSearchParams(route.slice(route.indexOf('?') + 1)).get('url');
+      return value && (value.startsWith('https://') || value.startsWith('http://')) ? value : null;
     } catch {
-      // a malformed address is simply ignored
+      return null;
     }
-  }, [route]);
+  })();
+  const [url, setUrl] = useState('');
   const [mode, setMode] = useState<InspectorTab>('general');
   const [selectedImage, setSelectedImage] = useState<CompressedImagePayload | null>(null);
   const [isScanning, setIsScanning] = useState(false);
@@ -75,7 +73,7 @@ function ScamHisnShell() {
     setError(null);
   };
 
-  const handleScanUrl = async (targetUrl: string, targetMode: ScanMode) => {
+  const handleScanUrl = async (targetUrl: string, targetMode: ScanMode, engine: 'auto' | 'claude' = 'auto') => {
     setIsScanning(true);
     setScanningVariant('url');
     setError(null);
@@ -84,7 +82,7 @@ function ScamHisnShell() {
     setImageResult(null);
 
     try {
-      const response = await scanUrl({ url: targetUrl, mode: targetMode, locale });
+      const response = await scanUrl({ url: targetUrl, mode: targetMode, locale, engine });
       setImageResult(null);
       setResult(response);
     } catch (err) {
@@ -150,7 +148,24 @@ function ScamHisnShell() {
   };
 
   // Once there is something to show, the hero shrinks so the result sits near the top
-  const compactHero = isScanning || result !== null || imageResult !== null;
+  // Arriving from Check Everything: run the check for that address straight away, Claude first
+  useEffect(() => {
+    if (!guardUrl) return;
+    setMode('general');
+    setUrl(guardUrl);
+    void handleScanUrl(guardUrl, 'general', 'claude');
+    // Runs once per stopped address; handleScanUrl is recreated on every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [guardUrl]);
+
+  const guardState: 'checking' | 'stopped' | 'cleared' =
+    !result || isScanning
+      ? 'checking'
+      : ['suspicious', 'high_risk', 'confirmed_scam'].includes(result.verdict)
+        ? 'stopped'
+        : 'cleared';
+
+  const compactHero = isScanning || result !== null || imageResult !== null || guardUrl !== null;
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-clip bg-page text-ink">
@@ -162,14 +177,9 @@ function ScamHisnShell() {
         </main>
       )}
 
-      {showWatch && (
-        <main className="flex-1">
-          <WatchPage />
-        </main>
-      )}
-
-      <main hidden={showImpact || showWatch} className="mx-auto w-full max-w-[1104px] flex-1 px-4 pb-20 sm:px-8 sm:pb-24">
+      <main hidden={showImpact} className="mx-auto w-full max-w-[1104px] flex-1 px-4 pb-20 sm:px-8 sm:pb-24">
         <Hero compact={compactHero} />
+        {guardUrl && !error && <GuardBanner url={guardUrl} state={guardState} />}
 
         {/* Inspection Form */}
         <ScanForm

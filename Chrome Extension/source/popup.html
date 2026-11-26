@@ -223,7 +223,7 @@
         </section>
       </main>
 
-      <!-- MODE 2: Check Everything (locked in production, unlocked in the private dev build) -->
+      <!-- MODE 2: Check Everything (a toggle; every site is checked as it opens) -->
       <section id="panel-auto" class="panel hidden">
         <div id="auto-locked-view" class="locked-card">
           <svg viewBox="0 0 24 24" class="locked-icon" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -240,19 +240,19 @@
         <div id="auto-dev-view" class="dev-card hidden">
           <div class="dev-card-head">
             <span class="dev-pill">DEV</span>
-            <h2 id="dev-monitor-title" class="dev-title">Private Developer Monitor</h2>
+            <h2 id="dev-monitor-title" class="dev-title">Check Everything</h2>
           </div>
           <p id="dev-monitor-desc" class="dev-desc">
-            Automatically scans visible external links on open pages and shows inline risk badges.
+            Every site you open, and every site a page redirects you to, goes through the ScamHisn AI engine. If it is not legitimate, the report opens instead of the site.
           </p>
 
           <label class="toggle-row">
-            <span id="dev-monitor-toggle-label" class="toggle-label">Auto-Monitor Pages</span>
+            <span id="dev-monitor-toggle-label" class="toggle-label">Check every site I open</span>
             <input id="dev-monitor-checkbox" type="checkbox" class="toggle-input" />
             <span class="toggle-slider"></span>
           </label>
 
-          <p id="dev-monitor-status" class="dev-status">Monitoring paused</p>
+          <p id="dev-monitor-status" class="dev-status">Off: nothing is checked automatically</p>
         </div>
       </section>
 

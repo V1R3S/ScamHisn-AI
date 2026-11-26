@@ -183,6 +183,7 @@ export async function runUrlScan(request: ScanRequest): Promise<ScanResponse> {
     // 6. AI forensic inspection through the fallback chain
     //    (Gemini keys → backup Gemini model → self-hosted model → rules only)
     const aiResult = await analyzeWithAi({
+      engine: request.engine,
       mode: request.mode,
       inputUrl: safeInitial.normalizedUrl,
       finalUrl: finalUrlObj.toString(),
